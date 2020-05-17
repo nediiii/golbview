@@ -53,7 +53,11 @@
             <Card>
               <div style="text-align:center">
                 <Avatar :src="require('@/assets/logo.png')" size="128" />
-                <h3>A high quality UI Toolkit based on Vue.js</h3>
+                <h3
+                  style="font-weight: lighter;font-size: small;margin-top: 10px;"
+                >
+                  期待美好的事情发生
+                </h3>
               </div>
             </Card>
             <hr style="border: whitesmoke;" />
@@ -178,8 +182,9 @@
                           description="This is description, this is description."
                         />
                       </ListItem>
-                    </List> </Card
-                ></TabPane>
+                    </List>
+                  </Card>
+                </TabPane>
               </Tabs>
               <Card :padding="0">
                 <p slot="title">
@@ -204,23 +209,12 @@
                     <Cell
                       v-if="data"
                       title="文章总数"
-                      :extra="data.allPosts.pageInfo.total"
+                      :extra="data.allPosts.pageInfo.total + ''"
                     />
-                    <Cell
-                      v-if="data"
-                      title="评论总数"
-                      :extra="data.allPosts.pageInfo.total"
-                    />
-                    <Cell
-                      v-if="data"
-                      title="运行天数"
-                      :extra="data.allPosts.pageInfo.total"
-                    />
-                    <Cell
-                      v-if="data"
-                      title="最后活动"
-                      :extra="data.allPosts.pageInfo.total"
-                    />
+
+                    <Cell v-if="data" title="最近更新">
+                      <Time slot="extra" :time="time3" :interval="1" />
+                    </Cell>
                   </ApolloQuery>
                 </CellGroup>
               </Card>
@@ -229,19 +223,43 @@
                   <Icon type="ios-pricetags-outline" />
                   标签云
                 </p>
-                <div>
-                  <Tag color="default">default</Tag>
-                  <Tag color="primary">primary</Tag>
-                  <Tag color="success">success</Tag>
-                  <Tag color="error">error</Tag>
-                  <Tag color="warning">warning</Tag>
-                  <Tag color="magenta">magenta</Tag>
-                  <Tag color="red">red</Tag>
-                  <Tag color="volcano">volcano</Tag>
-                  <Tag color="orange">orange</Tag>
-                  <Tag color="gold">gold</Tag>
-                  <Tag color="yellow">yellow</Tag>
-                </div>
+                <ApolloQuery
+                  :query="
+                    (gql) => gql`
+                      query {
+                        allTags {
+                          tags {
+                            id
+                            name
+                            description
+                          }
+                        }
+                      }
+                    `
+                  "
+                  v-slot="{ result: { data } }"
+                >
+                  <div v-if="data">
+                    <Tooltip
+                      placement="top"
+                      :content="t.description"
+                      :delay="1000"
+                      v-for="t in data.allTags.tags"
+                      :key="t.id"
+                    >
+                      <Tag
+                        :color="
+                          '#' +
+                            Math.random()
+                              .toString(16)
+                              .substr(2, 6)
+                        "
+                      >
+                        {{ t.name }}
+                      </Tag>
+                    </Tooltip>
+                  </div>
+                </ApolloQuery>
               </Card>
             </div>
           </Sider>
@@ -260,6 +278,7 @@ export default {
     return {
       isRightSiderCollapsed: false,
       isLeftSiderCollapsed: false,
+      time3: new Date(),
     };
   },
 
@@ -270,5 +289,12 @@ export default {
 </script>
 
 <style lang="less">
+html,
+body {
+  scroll-behavior: smooth;
+}
+*:focus {
+  outline: none;
+}
 @import "./app.less";
 </style>

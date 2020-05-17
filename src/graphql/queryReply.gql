@@ -1,0 +1,10 @@
+query($postID: ID, $parentID: ID) {
+  allComments(postID: $postID, parentID: $parentID) {
+    comments {
+      id
+      nickname
+      content
+      createAt
+    }
+  }
+}

@@ -11,9 +11,24 @@ const routes = [
     component: () => import("@/views/Home.vue"),
   },
   {
-    path: "/about",
-    name: "About",
-    component: () => import("@/views/About.vue"),
+    path: "/archive",
+    name: "Archive",
+    component: () => import("@/views/Archive.vue"),
+  },
+  {
+    path: "/post/:slug",
+    name: "Post",
+    component: () => import("@/views/Post.vue"),
+  },
+  {
+    path: "/:slug",
+    name: "Page",
+    component: () => import("@/views/Post.vue"),
+  },
+  {
+    path: "/friend/:slug",
+    redirect: "/friend",
+    name: "Friend",
   },
 ];
 
@@ -21,13 +36,6 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  scrollBehavior() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ x: 0, y: 0 });
-      }, 500);
-    });
-  },
 });
 
 router.beforeEach((to, from, next) => {

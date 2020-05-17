@@ -1,0 +1,23 @@
+mutation(
+  $nickname: String!
+  $email: String!
+  $target: String!
+  $content: String!
+  $postID: ID!
+  $parentID: ID!
+) {
+  createComment(
+    nickname: $nickname
+    email: $email
+    target: $target
+    content: $content
+    postID: $postID
+    parentID: $parentID
+  ) {
+    id
+    nickname
+    email
+    target
+    content
+  }
+}

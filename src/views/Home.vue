@@ -7,6 +7,9 @@
     <div style="padding: 18px;">
       <List item-layout="vertical">
         <Card v-for="post in posts" :key="post.id" style="margin-bottom: 18px;">
+          <router-link slot="title" :to="'/post/' + post.slug">
+            {{ post.title }}</router-link
+          >
           <ListItem style="padding: 0px;">
             <ListItemMeta
               :avatar="require('@/assets/logo.png')"
@@ -56,9 +59,9 @@ export default {
   data() {
     return {
       currentPage: 1,
-      perPage: 10,
+      perPage: 5,
       total: 0,
-      posts: [],
+      posts: [{ title: "", image: "" }],
       allPosts: { posts: [{ id: 0, image: "" }] },
     };
   },
