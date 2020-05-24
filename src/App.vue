@@ -118,7 +118,7 @@
             </Menu>
           </Sider>
           <Content
-            style="min-height:1600px;background: #f1f3f4"
+            style="min-height:calc(100vh - 64px);background: #f1f3f4"
             :style="{ marginLeft: isLeftSiderCollapsed ? '0px' : '200px' }"
           >
             <router-view />
