@@ -11,4 +11,11 @@ module.exports = {
       },
     },
   },
+  pluginOptions: {
+    // Apollo-related options
+    apollo: {
+      lintGQL: false,
+      cors: "*",
+    },
+  },
 };
