@@ -30,6 +30,8 @@
             </Button>
 
             <Input
+              search
+              @on-search="onSearch"
               suffix="ios-search"
               placeholder="Search the keyword"
               style="width: auto;"
@@ -265,6 +267,17 @@
           </Sider>
         </Layout>
       </Layout>
+      <Modal v-model="searchResultModel" title="Search Result" width="75">
+        <List>
+          <ListItem v-for="item in searchResult.items" :key="item.cacheId">
+            <ListItemMeta :description="item.htmlSnippet">
+              <template slot="title">
+                <a :href="item.link" target="_blank">{{ item.title }}</a>
+              </template>
+            </ListItemMeta>
+          </ListItem>
+        </List>
+      </Modal>
       <BackTop></BackTop>
     </i-col>
   </Row>
@@ -276,6 +289,8 @@ export default {
   components: {},
   data() {
     return {
+      searchResult: {},
+      searchResultModel: false,
       isRightSiderCollapsed: false,
       isLeftSiderCollapsed: false,
       time3: new Date(),
@@ -283,7 +298,34 @@ export default {
   },
 
   methods: {
-    onClick() {},
+    onSearch(value) {
+      // console.log(value);
+      let ParasCx = "017401005298521109186:smtaeuwwv1w";
+      let ParasKey = "AIzaSyBPOQ6e9BjLbdMFGtpy3RCMkzYe_6m8yE4";
+      fetch(
+        `https://www.googleapis.com/customsearch/v1/siterestrict?key=${ParasKey}&cx=${ParasCx}&q=${value}`
+      )
+        .then((response) => {
+          if (response.status !== 200) {
+            console.log(
+              "Looks like there was a problem. Status Code: " + response.status
+            );
+            return;
+          }
+          // Examine the text in the response
+          response.json().then((data) => {
+            this.searchResultModel = true;
+            this.searchResult = data;
+            console.log(data);
+          });
+        })
+        .catch((err) => {
+          this.$Message.error({
+            content: "搜索失败,请确保您能正常访问国际互联网",
+          });
+          console.log("Fetch Error :-S", err);
+        });
+    },
   },
 };
 </script>
